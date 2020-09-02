@@ -25,20 +25,36 @@ class Optimizer {
 public:
 	Optimizer(double (*func)(double, double), domain domain, point initial_guess, double tol);
 	~Optimizer();
-	void setDomain(const domain domainIn);
-	void runOptimizer();
-	virtual std::vector<point> stepOptimizer();
-	bool checkDomain(std::vector<point>& proposedPoints);
-	void evaluatePoints(std::vector<point>& proposedPoints);
-	void updatePoints(std::vector<point>& proposedPoints);
+	void setDomain(const domain domainIn);  // Check that the input domain is valid.
+	void runOptimizer();  // Step the optimizer untill tol or max iteration condition is meet.
+	virtual std::vector<point> stepOptimizer();  // Run a single step of the optimizer.
+	bool checkDomain(std::vector<point>& proposedPoints);  // Check that proposed points fall withing the domain.
+	bool checkDomain(point point);
+	void evaluatePoints(std::vector<point>& proposedPoints);  // Evalueate proposed points.
+	
+	void updatePoints(std::vector<point>& proposedPoints);  // Update the mEvaluated and mOptimum.
 private:
-	double (*mTargetFunc)(double, double);
-	domain mDomain;
-	double mTol;
-	unsigned mMaxIterations = 100;
+	double (*mTargetFunc)(double, double);  // The target function to optimize.
+	domain mDomain;  // Domain over which to find the optimum.
+	double mTol;  // Convergance tollerance.
+	unsigned mMaxIterations = 100; 
 	std::vector<point> mEvaluatedPoints;  // Contains all evaluated points. 
 	std::vector<point> mOptimumPoints;  // Contains the optimum point at each step.		
 };
+
+Optimizer::Optimizer(double(*func)(double, double), domain domain, point initial_guess, double tol)
+{
+	mTargetFunc = func;
+	setDomain(domain);
+	if (checkDomain(initial_guess))
+	{
+
+	}
+}
+
+Optimizer::~Optimizer()
+{
+}
 
 void Optimizer::setDomain(const domain domainIn)
 {
