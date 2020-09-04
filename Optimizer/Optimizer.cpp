@@ -6,6 +6,8 @@
 #include <stdexcept>
 #include <vector>
 
+#include <random>
+
 struct domain 
 {
 	double xMin = -1.0;
@@ -23,77 +25,105 @@ struct point
 
 class Optimizer {
 public:
-	Optimizer(double (*func)(double, double), domain domain, point initial_guess, double tol);
+	Optimizer(double (*func)(double, double), domain domain, double tollerance, unsigned maxEvaluations);
 	~Optimizer();
-	void setDomain(const domain domainIn);  // Check that the input domain is valid.
-	void runOptimizer();  // Step the optimizer untill tol or max iteration condition is meet.
-	virtual std::vector<point> stepOptimizer();  // Run a single step of the optimizer.
-	bool checkDomain(std::vector<point>& proposedPoints);  // Check that proposed points fall withing the domain.
-	bool checkDomain(point point);
-	void evaluatePoints(std::vector<point>& proposedPoints);  // Evalueate proposed points.
+	virtual void optimize();
+	// Getters
+	double getTollerance() { return this->mTollerance; };
+	unsigned getMaxIterations() { return this->mMaxEvaluations; };
+	domain getDomain() { return this->mDomain; };
+	point getCurrentOptimum() { return this->mOptimumPoints.back(); };
+
+	//Setters
+	void setTollerance(double newTollerance);
+	void setMaxEvaluations(unsigned newMaxEvaluations) { this->mMaxEvaluations = newMaxEvaluations; };
+	void setDomain(domain newDomain);
 	
-	void updatePoints(std::vector<point>& proposedPoints);  // Update the mEvaluated and mOptimum.
+	//Others
+	bool atMaxEvaluations() { return this->mEvaluatedPoints.size() > this->mMaxEvaluations; }
+	bool converged();
+	double evaluateTarget(double x, double y);
+
 private:
 	double (*mTargetFunc)(double, double);  // The target function to optimize.
 	domain mDomain;  // Domain over which to find the optimum.
-	double mTol;  // Convergance tollerance.
-	unsigned mMaxIterations = 100; 
+	double mTollerance;  // Convergence tolerance.
+	unsigned mMaxEvaluations; 
 	std::vector<point> mEvaluatedPoints;  // Contains all evaluated points. 
-	std::vector<point> mOptimumPoints;  // Contains the optimum point at each step.		
+	std::vector<point> mOptimumPoints;
 };
 
-Optimizer::Optimizer(double(*func)(double, double), domain domain, point initial_guess, double tol)
+bool Optimizer::converged() 
+{
+	if (mOptimumPoints.size() < 2) // Not enough optimum points to determine convergence.
+		return false;
+	if ((mOptimumPoints.end()[-2].z - mOptimumPoints.end()[-1].z) < this->mTollerance)
+		return true;
+	else
+		return false;
+}
+
+void Optimizer::setTollerance(double newTollerance) 
+{
+	if (newTollerance > 1E-12) 
+	{ 
+		this->mTollerance = newTollerance; 
+	}
+	else 
+	{ 
+		throw std::invalid_argument("Convergence tolerance must be greater than 1E-12."); 
+	}
+}
+
+void Optimizer::setDomain(domain newDomain) 
+{
+	if ((newDomain.xMax > newDomain.xMin) & (newDomain.yMax > newDomain.yMin))
+	{
+		mDomain = newDomain;
+	}
+	else { throw std::invalid_argument("Domain is incorrect."); }
+}
+
+double Optimizer::evaluateTarget(double x, double y) 
+{
+	point newPoint{ x, y, this->mTargetFunc(x, y) };
+	this->mEvaluatedPoints.push_back(newPoint);  // Always add any evaluated points.
+	if (this->mOptimumPoints.back().z > newPoint.z) // Check if newest point is optimum.
+	{ 
+		this->mOptimumPoints.push_back(newPoint); 
+	}
+}
+
+Optimizer::Optimizer(double (*func)(double, double), domain domain , double tollerance, unsigned maxEvaluations)
 {
 	mTargetFunc = func;
 	setDomain(domain);
-	if (checkDomain(initial_guess))
-	{
-
-	}
+	setTollerance(tollerance);
+	setMaxEvaluations(maxEvaluations);
 }
 
 Optimizer::~Optimizer()
 {
 }
 
-void Optimizer::setDomain(const domain domainIn)
-{
-	if (domainIn.xMax > domainIn.xMin && domainIn.xMax > domainIn.xMin)
-	{
-		mDomain = domainIn;
-	}
-	else 
-	{ 
-		throw std::runtime_error("Domain is incorrect."); 
-	}
-}
+class Dummy : public Optimizer {
+public:
+	Dummy(double (*func)(double, double), int randomSeed, domain domain, double tol, unsigned maxIterations);
+	~Dummy();
+	void optimize();
+private:
+	int mRandomSeed;
+};
 
-void Optimizer::evaluatePoints(std::vector<point>& proposedPoints)
-{
-	for (auto& pt : proposedPoints) 
-	{
-		pt.z = mTargetFunc(pt.x, pt.y);
-	}
-}
+Dummy::Dummy(double (*func)(double, double), int randomSeed, domain domain, double tol, unsigned maxIterations) : 
+			 Optimizer(func, domain, tol, maxIterations), mRandomSeed (randomSeed) {}
 
-/*
-	The optimization process is done here. While either the tollerance condition or the max
-	iterations not complete the optimizer is steped, points are evaluated and the status of 
-	the optimization is updated.
-*/
-void Optimizer::runOptimizer()
-{
-	unsigned iterCount = 0;
-	double currTol = mTol * 10;
-	while (iterCount < mMaxIterations )
+void Dummy::optimize() {
+	std::default_random_engine genorator(mRandomSeed);
+	std::uniform_real_distribution<double> xDistribution(getDomain().xMin, getDomain().xMax);
+	std::uniform_real_distribution<double> yDistribution(getDomain().yMin, getDomain().yMax);
+	while(!this->atMaxEvaluations() & !this->converged())
 	{
-		std::vector<point> proposedPoints = stepOptimizer();
-		if( checkDomain(proposedPoints) )
-		{
-			evaluatePoints(proposedPoints);
-			updatePoints(proposedPoints);
-		}else{
-			throw std::runtime_error("Domain is incorrect.");
-		}
+		this->evaluateTarget(xDistribution(genorator), yDistribution(genorator));
 	}
 }

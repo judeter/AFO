@@ -20,7 +20,9 @@ recording them is to provide clear tangible goals/task for that period of develo
 	- Create two optimization functions in the test function library.
 
 #### Minimal Attribute and method set.
-For an initial pass at an optimizer we consider a 2d optimizer.
+For an initial pass at an optimizer we consider a 2d optimizer. The optimize method is the virtual method that each 
+subclass implementation. For now we consider that the optimize function will correctly set all of the class attributes.
+This can, and most likely will change as the project grows.
  
   - Attributes 
     - Common Attributes
@@ -31,6 +33,10 @@ For an initial pass at an optimizer we consider a 2d optimizer.
       - convergenceTollerance
       - currentOptimum
       - converged
+    - Common Methods
+    - 
+    - Virtual Methods
+      - optimize
 
   - Dummy Specific Attributes    
       - randomSeed
