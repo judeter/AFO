@@ -4,7 +4,7 @@ recording them is to provide clear tangible goals/task for that period of develo
 
 ### Initial interface and dummy optimizer.
 
-	- Outline the **minimal** set of attributes and methods necessary for an optimizer interface and dummy 
+	- Outline the MINIMAL set of attributes and methods necessary for an optimizer interface and dummy 
       optimizer. The purpose is not to develop a grand over arching interface for all conceivable 
       optimization routines. Instead the goal is to identify the minimal attributes to define a dummy 
       optimizer and split those attributes into two categories, attributes general to all optimizes and 
@@ -19,6 +19,12 @@ recording them is to provide clear tangible goals/task for that period of develo
 
 	- Create two optimization functions in the test function library.
 
+    - Export the developed test functions and the dummy optimizer as a static library for you in a second 
+      add called Evaluation. The purpose of evaluation is to use the Optimizer on the test functions and 
+      evaluate the performance of the particular optimizers on the test functions. Profiling the performance
+      of the optimization routines on specific test function should be recorded to track the improvement of 
+      library overtime.
+
 #### Minimal Attribute and method set.
 For an initial pass at an optimizer we consider a 2d optimizer. The optimize method is the virtual method that each 
 subclass implementation. For now we consider that the optimize function will correctly set all of the class attributes.
@@ -29,7 +35,7 @@ This can, and most likely will change as the project grows.
       - domain
       - responseFunction
       - evaluatedPoints
-      - numMaxIterations
+      - numMaxEvaluations
       - convergenceTollerance
       - currentOptimum
       - converged
