@@ -45,7 +45,11 @@ namespace Optimizer
 	{
 		point newPoint{ x, y, this->mTargetFunc(x, y) };
 		this->mEvaluatedPoints.push_back(newPoint);  // Always add any evaluated points.
-		if (this->mOptimumPoints.back().z > newPoint.z) // Check if newest point is optimum.
+		if (this->mOptimumPoints.empty())
+		{
+			this->mOptimumPoints.push_back(newPoint);
+		}
+		else if (this->mOptimumPoints.back().z > newPoint.z) // Check if newest point is optimum.
 		{
 			this->mOptimumPoints.push_back(newPoint);
 		}

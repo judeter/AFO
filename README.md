@@ -4,26 +4,26 @@ recording them is to provide clear tangible goals/task for that period of develo
 
 ### Initial interface and dummy optimizer.
 
-	- Outline the MINIMAL set of attributes and methods necessary for an optimizer interface and dummy 
-      optimizer. The purpose is not to develop a grand over arching interface for all conceivable 
-      optimization routines. Instead the goal is to identify the minimal attributes to define a dummy 
-      optimizer and split those attributes into two categories, attributes general to all optimizes and 
-      dummy optimizer specific attributes.
+- ~~Outline the **MINIMAL** set of attributes and methods necessary for an optimizer interface and dummy 
+  optimizer. The purpose is not to develop a grand over arching interface for all conceivable 
+  optimization routines. Instead the goal is to identify the minimal attributes to define a dummy 
+  optimizer and split those attributes into two categories, attributes general to all optimizes and 
+  dummy optimizer specific attributes.~~
 	
-	- Create an abstract interface from the set of general optimizer attributes. Over time the interface can
-      grow to accommodate other methods as they are developed. 
+- ~~Create an abstract interface from the set of general optimizer attributes. Over time the interface can
+  grow to accommodate other methods as they are developed.~~ 
 	
-	- Create a "dummy" optimizer that generates uniform random numbers as a method of optimization. The 
-      purpose of this "optimizer" to create a baseline routine for comparison against other legitimate 
-      optimization routines.
+- ~~Create a "dummy" optimizer that generates uniform random numbers as a method of optimization. The 
+  purpose of this "optimizer" to create a baseline routine for comparison against other legitimate 
+  optimization routines.~~
 
-	- Create two optimization functions in the test function library.
+- Create two optimization functions in the test function library.
 
-    - Export the developed test functions and the dummy optimizer as a static library for you in a second 
-      add called Evaluation. The purpose of evaluation is to use the Optimizer on the test functions and 
-      evaluate the performance of the particular optimizers on the test functions. Profiling the performance
-      of the optimization routines on specific test function should be recorded to track the improvement of 
-      library overtime.
+- Export the developed test functions and the dummy optimizer as a static library for you in a second 
+  add called Evaluation. The purpose of evaluation is to use the Optimizer on the test functions and 
+  evaluate the performance of the particular optimizers on the test functions. Profiling the performance
+  of the optimization routines on specific test function should be recorded to track the improvement of 
+  library overtime.
 
 #### Minimal Attribute and method set.
 For an initial pass at an optimizer we consider a 2d optimizer. The optimize method is the virtual method that each 
@@ -49,8 +49,17 @@ This can, and most likely will change as the project grows.
       - 
 
 ### Structures ???
-    - Domain
-    - point
+- domain
+   + xMin
+   + xMax
+   + yMin
+   + yMax
+        
+- point
+  + x
+  + y
+  + z
+  + n: Integer number for when the point was evaluated?
 ### Attributes
 
        
@@ -72,6 +81,20 @@ This can, and most likely will change as the project grows.
   - setDomain:
   - evaluateResponce:
   - proposer:
-    
+  
+### Evaluation Metrics
+
+#### Convergence Rate: 
+How many iterations does it take a method to converge?
+
+Convergance of an algorithum depends on various input. Initial point, step parameters, random seeds, etc. Compairing
+two algorithums with at a single set of values 
+
+Note for "sudo-random" algorithums one is tempted to say that it is nessisary to run multiple time to determine the 
+average. This goes agains the design philllosphy that all algorithums are deterministic. Any randomness used in an
+algorithum should be set with a random seed value. Like and inital starting point the average performance of an 
+algorithum can be evaluated by considering various random seeds.
+
+  
 
 

@@ -31,21 +31,25 @@ namespace Optimizer
 	public:
 		Optimizer(double (*func)(double, double), domain domain, double tollerance, unsigned maxEvaluations);
 		~Optimizer();
-		virtual void optimize();
+		virtual void optimize() = 0;
 		// Getters
 		double getTollerance() { return this->mTollerance; };
 		unsigned getMaxIterations() { return this->mMaxEvaluations; };
 		domain getDomain() { return this->mDomain; };
 		point getCurrentOptimum() { return this->mOptimumPoints.back(); };
+		std::vector<point>& getEvaluatedPoints() { return this->mEvaluatedPoints; }
+		std::vector<point>& getOptimumPoints() { return this->mOptimumPoints; }
 
 		//Setters
 		void setTollerance(double newTollerance);
 		void setMaxEvaluations(unsigned newMaxEvaluations) { this->mMaxEvaluations = newMaxEvaluations; };
 		void setDomain(domain newDomain);
 
-		//Others
+		//Optimizer Termination Control.
 		bool atMaxEvaluations() { return this->mEvaluatedPoints.size() > this->mMaxEvaluations; }
 		bool converged();
+
+		// Others
 		double evaluateTarget(double x, double y);
 
 	private:
@@ -55,6 +59,16 @@ namespace Optimizer
 		unsigned mMaxEvaluations;
 		std::vector<point> mEvaluatedPoints;  // Contains all evaluated points. 
 		std::vector<point> mOptimumPoints;
+	};
+
+	class Dummy : public Optimizer 
+	{
+	public:
+		Dummy(double (*func)(double, double), int randomSeed, domain domain, double tol, unsigned maxIterations);
+		~Dummy();
+		void optimize() override;
+	private:
+		int mRandomSeed;
 	};
 
 }
