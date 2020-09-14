@@ -25,6 +25,34 @@ recording them is to provide clear tangible goals/task for that period of develo
   of the optimization routines on specific test function should be recorded to track the improvement of 
   library overtime.
 
+### Initial Python Package.
+
+- In the end the optimizer tool box being written in c++ will be extended to a python module. The user can then choose 
+  to impliment their algorithum using c++ or python.
+- Possible Libraies to use to extend the c++ library to python. 
+  + Python c/cpp API.
+  + Boost python 
+  + pybind11
+- Checkout this artical (https://skebanga.github.io/embedded-python/) for using pyton implimented algorithums in c++ 
+  code. This would make it esier to impliment and test an algorithums performance, then port it to cpp for perfomance
+  if needed.
+- End goal should be to be able to call an optimizer from python. Below is an example of code that should be able to run
+  in python once the module is created.
+
+    ```
+
+    import afo
+    import matplotlib.pyplot as plt
+
+    optimizer = afo.optimizers.dummy(<initilization criteria>)     
+    optimizer.optimize()
+    
+    print(optimizer)  # Prints a report of the optimizer to the screen.
+    plt.plot(optimizer.optimum_points)  # Plot the the Optimum Value vs. Iteration.
+
+    ```
+    
+
 #### Minimal Attribute and method set.
 For an initial pass at an optimizer we consider a 2d optimizer. The optimize method is the virtual method that each 
 subclass implementation. For now we consider that the optimize function will correctly set all of the class attributes.
@@ -87,7 +115,7 @@ This can, and most likely will change as the project grows.
 #### Convergence Rate: 
 How many iterations does it take a method to converge?
 
-Convergance of an algorithum depends on various input. Initial point, step parameters, random seeds, etc. Compairing
+Convergence of an algorithum depends on various input. Initial point, step parameters, random seeds, etc. Compairing
 two algorithums with at a single set of values 
 
 Note for "sudo-random" algorithums one is tempted to say that it is nessisary to run multiple time to determine the 

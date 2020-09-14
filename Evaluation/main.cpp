@@ -11,6 +11,7 @@ int main(void)
 	{
 		std::cout << " x: " << pi.x << " y: " << pi.y << " z: " << pi.z << std::endl;
 	}
+	test_dummy.writeReport("TestDummyReport.txt");
 
 	return 0;
 }

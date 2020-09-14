@@ -6,6 +6,8 @@
 
 #include "Optimizer.h"
 #include <stdexcept>
+#include <iostream>
+#include <fstream>
 
 namespace Optimizer
 {
@@ -66,6 +68,17 @@ namespace Optimizer
 
 	Optimizer::~Optimizer()
 	{
+	}
+
+	void Optimizer::writeReport(const std::string& fileName)
+	{
+		std::ofstream reportFile(fileName);
+		if (reportFile.is_open())
+		{
+			reportFile << "           Converged: " << this->converged() << std::endl;
+			reportFile << "Number of Iterations: " << this->mEvaluatedPoints.size() << std::endl;
+		}
+		
 	}
 
 }

@@ -1,12 +1,7 @@
 #pragma once
 
-#ifdef OPTLIBRARY_EXPORTS
-#define OPTLIBRARY_API __declspec(dllexport)
-#else
-#define OPTLIBRARY_API __declspec(dllimport)
-#endif
-
 #include <vector>
+#include <string>
 
 namespace Optimizer 
 {
@@ -51,6 +46,7 @@ namespace Optimizer
 
 		// Others
 		double evaluateTarget(double x, double y);
+		void writeReport(const std::string& fileName);
 
 	private:
 		double (*mTargetFunc)(double, double);  // The target function to optimize.
