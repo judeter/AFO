@@ -1,7 +1,4 @@
 
-#include "pch.h"
-#include "framework.h"
-
 #include "Optimizer.h"
 #include <random>
 #include <iostream>

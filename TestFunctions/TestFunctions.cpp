@@ -1,8 +1,7 @@
 // TestFunctions.cpp : Defines the functions for the static library.
 //
 
-#include "pch.h"
-#include "framework.h"
+
 #include "TestFunctions.h"
 #define _USE_MATH_DEFINES
 #include <math.h>

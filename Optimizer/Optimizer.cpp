@@ -1,9 +1,6 @@
 // Optimizer.cpp : Defines the functions for the static library.
 //
 
-#include "pch.h"
-#include "framework.h"
-
 #include "Optimizer.h"
 #include <stdexcept>
 #include <iostream>
